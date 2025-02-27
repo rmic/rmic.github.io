@@ -1,4 +1,6 @@
 site_name: "rmic"
+site_url: "https://rmic.github.io/"
+
 plugins:
   - blog:
       blog_toc: true
