@@ -18,3 +18,7 @@ theme:
     - search.highlight
     - content.code.annotate
     - content.code.copy
+nav:
+- Home: index.md
+- Blog:
+    - "Latest Posts": blog/index.md
