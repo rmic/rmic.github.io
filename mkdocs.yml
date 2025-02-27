@@ -19,6 +19,8 @@ theme:
     - content.code.annotate
     - content.code.copy
 nav:
-- Home: index.md
-- Blog:
-    - "Latest Posts": blog/index.md
+  - Home: index.md
+  - Blog:
+      - "MLOps": blog/mlops/index.md
+      - "Data Engineering": blog/data-engineering/index.md
+      - "Software Engineering": blog/software-engineering/index.md
