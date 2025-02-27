@@ -1,0 +1,18 @@
+site_name: "rmic"
+plugins:
+  - blog:
+      blog_toc: true
+      post_date_format: medium
+      post_url_format: "{slug}"
+  - meta
+  - tags
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.instant
+    - navigation.tracking
+    - toc.integrate
+    - search.highlight
+    - content.code.annotate
+    - content.code.copy
