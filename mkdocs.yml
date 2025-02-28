@@ -53,3 +53,5 @@ nav:
   - "Data Engineering": /category/data-engineering/
   - "Software Engineering": /category/software-engineering/
 
+extra_css:
+  - stylesheets/extra.css

@@ -1,0 +1,9 @@
+.md-header {
+    background-color: var(--md-default-bg-color); /* Fond identique au reste du site */
+    color: var(--md-default-fg-color); /* Texte identique au reste du site */
+}
+
+.md-tabs {
+    background-color: var(--md-default-bg-color); /* Fond identique au reste du site */
+    color: var(--md-default-fg-color); /* Texte identique au reste du site */
+}
