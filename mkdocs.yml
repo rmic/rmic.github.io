@@ -43,14 +43,15 @@ theme:
         icon: material/brightness-4
         name: Switch to light mode
 
+
   markdown_extensions:
     - abbr
     - admonition
 
 nav:
   - Home: index.md
-  - MLOps: /category/mlops/
-  - "Data Engineering": /category/data-engineering/
+  - "AI": /category/ai/
+  - "Data": /category/data/
   - "Software Engineering": /category/software-engineering/
 
 extra_css:
