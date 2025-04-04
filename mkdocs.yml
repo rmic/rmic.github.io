@@ -1,5 +1,6 @@
-site_name: "rmic"
+site_name: "/lost+found/"
 site_url: "https://rmic.github.io/"
+site_description: "A stash of ideas, side quests, and near misses."
 
 plugins:
   - blog:
