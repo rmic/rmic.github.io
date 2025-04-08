@@ -24,6 +24,7 @@ theme:
     - content.code.copy
     - search.suggest
     - search.highlight
+
   palette: 
   # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
@@ -45,15 +46,19 @@ theme:
         name: Switch to light mode
 
 
-  markdown_extensions:
+markdown_extensions:
     - abbr
     - admonition
+    - pymdownx.details
+    - pymdownx.superfences
 
 nav:
   - Home: index.md
   - "AI": /category/ai/
   - "Data": /category/data/
   - "Software Engineering": /category/software-engineering/
+  - "git tricks": /category/git-tricks/
+  - "Misc": /category/misc/
 
 extra_css:
   - stylesheets/extra.css
