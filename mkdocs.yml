@@ -54,7 +54,7 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - "Geospatial": /category/geo/
+  - "Geospatial": /category/geospatial/
   - "Data": /category/data/
 
 

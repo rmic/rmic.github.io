@@ -232,11 +232,9 @@ Even after an intersection is computed, the result is still not a usable geograp
 
 Coordinates only make sense relative to a reference frame, which is usually defined by three elements:
 
-	•	a **datum** — a mathematical model of the Earth that defines what “zero” means and how positions relate to the planet’s shape (sphere, ellipsoid, reference surface).
-
-	•	a **projection** — a rule that transforms positions on a curved surface into a flat, two‑dimensional space, inevitably distorting distances, angles, or areas in the process.
-
-	•	a **convention** — a set of choices about axes, units, orientation, and coordinate order (for example: meters vs degrees, east‑north vs north‑east, origin placement).
+* a **datum** — a mathematical model of the Earth that defines what “zero” means and how positions relate to the planet’s shape (sphere, ellipsoid, reference surface).
+* a **projection** — a rule that transforms positions on a curved surface into a flat, two‑dimensional space, inevitably distorting distances, angles, or areas in the process.
+* a **convention** — a set of choices about axes, units, orientation, and coordinate order (for example: meters vs degrees, east‑north vs north‑east, origin placement).
 
 Different choices produce different numbers for the same physical location — all of them internally consistent, none of them universally “correct”.
 
@@ -255,9 +253,9 @@ Every pixel-to-ground conversion performs these steps, explicitly or implicitly:
 When these steps are hidden, results look clean, precise, and authoritative.
 
 When they are exposed, it becomes clear that:
-	•	different assumptions produce different answers,
-	•	confidence depends on the weakest element,
-	•	and precision without context is meaningless.
+•	different assumptions produce different answers,
+•	confidence depends on the weakest element,
+•	and precision without context is meaningless.
 
 This is not a flaw of the method.
 It is the nature of geometry.
