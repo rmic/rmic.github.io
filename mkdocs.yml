@@ -54,11 +54,9 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - "AI": /category/ai/
+  - "Geospatial": /category/geo/
   - "Data": /category/data/
-  - "Software Engineering": /category/software-engineering/
-  - "git tricks": /category/git-tricks/
-  - "Misc": /category/misc/
+
 
 extra_css:
   - stylesheets/extra.css
