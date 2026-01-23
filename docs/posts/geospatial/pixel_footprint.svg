@@ -1,0 +1,114 @@
+<svg width="900" height="420" viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- soft fills -->
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7fbff"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+
+    <!-- markers for axes (optional) -->
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#333"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="900" height="420" fill="url(#sky)"/>
+
+  <!-- Title -->
+  <text x="450" y="28" font-size="18" text-anchor="middle" fill="#111" font-family="system-ui, -apple-system, Segoe UI, Roboto">
+    Pixel → viewing frustum → surface choice → intersection
+  </text>
+  <text x="450" y="52" font-size="12" text-anchor="middle" fill="#444" font-family="system-ui, -apple-system, Segoe UI, Roboto">
+    Same pixel, same camera, same viewing direction — different surfaces → different ground locations
+  </text>
+
+  <!-- CAMERA -->
+  <!-- Drone / camera body -->
+  <rect x="95" y="85" width="90" height="38" rx="8" fill="#1b1b1b"/>
+  <circle cx="140" cy="124" r="10" fill="#1b1b1b"/>
+  <circle cx="140" cy="124" r="4" fill="#8bd3ff"/>
+  <text x="140" y="78" font-size="12" text-anchor="middle" fill="#111" font-family="system-ui, -apple-system, Segoe UI, Roboto">
+    Camera (at altitude)
+  </text>
+
+  <!-- ALTITUDE indicator -->
+  <line x1="70" y1="104" x2="70" y2="290" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="52" y="205" font-size="12" text-anchor="middle" fill="#333" font-family="system-ui, -apple-system, Segoe UI, Roboto" transform="rotate(-90 52 205)">
+    altitude
+  </text>
+
+  <!-- PIXEL on sensor (schematic inset) -->
+  <rect x="235" y="70" width="110" height="70" rx="10" fill="#f2f2f2" stroke="#111" stroke-width="1"/>
+  <text x="290" y="63" font-size="12" text-anchor="middle" fill="#111" font-family="system-ui, -apple-system, Segoe UI, Roboto">
+    Sensor (schematic)
+  </text>
+  <rect x="275" y="95" width="30" height="30" fill="#cce5ff" stroke="#111" stroke-width="1"/>
+  <text x="290" y="136" font-size="11" text-anchor="middle" fill="#111" font-family="system-ui, -apple-system, Segoe UI, Roboto">
+    one pixel
+  </text>
+
+  <!-- FRUSTUM (long pyramid) -->
+  <!-- Apex near camera, base on ground footprint zone -->
+  <!-- Use semi-transparent fill to show "area" not a ray -->
+  <polygon points="140,124 560,250 640,250" fill="#ff6b6b" fill-opacity="0.18" stroke="#ff6b6b" stroke-width="2"/>
+  <line x1="140" y1="124" x2="600" y2="250" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="6 5"/>
+  <text x="410" y="160" font-size="12" fill="#b30000" font-family="system-ui, -apple-system, Segoe UI, Roboto">
+    viewing frustum (pixel footprint grows with distance)
+  </text>
+
+  <!-- FLAT SURFACE (Surface A) -->
+  <line x1="380" y1="290" x2="860" y2="290" stroke="#1f77b4" stroke-width="3"/>
+  <text x="790" y="312" font-size="12" fill="#1f77b4" font-family="system-ui, -apple-system, Segoe UI, Roboto">
+    Surface A: flat plane
+  </text>
+
+  <!-- SLOPED SURFACE (Surface B) -->
+  <line x1="360" y1="345" x2="860" y2="255" stroke="#2ca02c" stroke-width="3"/>
+  <text x="780" y="240" font-size="12" fill="#2ca02c" font-family="system-ui, -apple-system, Segoe UI, Roboto">
+    Surface B: sloped terrain
+  </text>
+
+  <!-- INTERSECTIONS -->
+  <!-- Intersection with flat plane: choose point on centerline at y=290 -->
+  <circle cx="746" cy="290" r="6" fill="#1f77b4" stroke="#0b2d4d" stroke-width="1"/>
+  <text x="760" y="282" font-size="12" fill="#1f77b4" font-family="system-ui, -apple-system, Segoe UI, Roboto">
+    intersection A
+  </text>
+
+  <!-- Intersection with sloped surface: pick point along centerline crossing the slope -->
+  <circle cx="670" cy="289" r="6" fill="#2ca02c" stroke="#145214" stroke-width="1"/>
+  <text x="684" y="304" font-size="12" fill="#2ca02c" font-family="system-ui, -apple-system, Segoe UI, Roboto">
+    intersection B
+  </text>
+
+  <!-- FOOTPRINTS on surfaces (show pixel covers an area) -->
+  <!-- On flat plane -->
+  <line x1="700" y1="290" x2="792" y2="290" stroke="#ff6b6b" stroke-width="6" stroke-linecap="round" opacity="0.55"/>
+  <text x="746" y="330" font-size="11" text-anchor="middle" fill="#b30000" font-family="system-ui, -apple-system, Segoe UI, Roboto">
+    pixel footprint on Surface A
+  </text>
+  <line x1="746" y1="315" x2="746" y2="296" stroke="#b30000" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- On sloped terrain -->
+  <!-- Compute a short segment around intersection B along the slope line -->
+  <line x1="630" y1="296" x2="710" y2="282" stroke="#ff6b6b" stroke-width="6" stroke-linecap="round" opacity="0.55"/>
+  <text x="670" y="356" font-size="11" text-anchor="middle" fill="#b30000" font-family="system-ui, -apple-system, Segoe UI, Roboto">
+    pixel footprint on Surface B
+  </text>
+  <line x1="670" y1="340" x2="670" y2="300" stroke="#b30000" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- LEGEND -->
+  <rect x="40" y="320" width="300" height="80" rx="10" fill="#ffffff" stroke="#ddd"/>
+  <text x="60" y="345" font-size="12" fill="#111" font-family="system-ui, -apple-system, Segoe UI, Roboto">Legend</text>
+
+  <line x1="60" y1="365" x2="100" y2="365" stroke="#ff6b6b" stroke-width="4"/>
+  <text x="110" y="369" font-size="12" fill="#111" font-family="system-ui, -apple-system, Segoe UI, Roboto">Viewing frustum (pixel → area)</text>
+
+  <line x1="60" y1="385" x2="100" y2="385" stroke="#1f77b4" stroke-width="4"/>
+  <text x="110" y="389" font-size="12" fill="#111" font-family="system-ui, -apple-system, Segoe UI, Roboto">Surface A (flat) + intersection A</text>
+
+  <line x1="60" y1="405" x2="100" y2="405" stroke="#2ca02c" stroke-width="4"/>
+  <text x="110" y="409" font-size="12" fill="#111" font-family="system-ui, -apple-system, Segoe UI, Roboto">Surface B (slope) + intersection B</text>
+
+</svg>

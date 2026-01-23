@@ -116,6 +116,10 @@ Even minor relief breaks geometric symmetry.
 
 The flatter the world is assumed to be, the more confident the result appears — and the further it can quietly drift from reality.
 
+![Projection differences](pixel_footprint.svg)
+/// caption
+Slopes can quickly introduce significant displacement and sizing differences
+///
 ### The camera pose is perfectly known
 
 Another strong assumption is that the camera’s position and orientation are known with sufficient accuracy.
