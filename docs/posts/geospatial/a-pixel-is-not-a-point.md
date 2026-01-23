@@ -3,10 +3,10 @@ date: 2026-01-22
 categories:
   - geospatial
 ---
-
 # Why a pixel is not a geographic point
 
 TL;DR
+
 A pixel is an image-space measurement, not a location on Earth.
 Treating it as a point is a category error that silently breaks geospatial reasoning.
 
@@ -15,13 +15,12 @@ Treating it as a point is a category error that silently breaks geospatial reaso
 
 If you work with images, maps, or computer vision, this assumption feels natural:
 
-“This object is at pixel (x, y), so I know where it is.”
+*“This object is at pixel (x, y), so I know where it is.”*
 
-A slightly more refined version often follows:
-
-“I know the pixel coordinates and the GPS position of the image, so I can convert that pixel into latitude and longitude.”
+A slightly more refined version often follows: *“I know the pixel coordinates and the GPS position of the image, so I can convert that pixel into latitude and longitude.”*
 
 This intuition is not stupid. It feels reasonable, especially if you are used to grids, arrays, coordinates and numerical precision.
+
 
 Pixels have coordinates. Maps have coordinates.
 So why shouldn’t one turn into the other?
@@ -32,16 +31,16 @@ Because they exist in different worlds.
 
 Long story short : A pixel is **not** a point.
 
-It is a small — sometimes very small — rectangular area on a camera sensor. During an exposure, that area integrates incoming light from the scene in front of the camera. Nothing in that process encodes depth, direction, or position in the world.
+It is a small — sometimes *very* small — rectangular area on a camera sensor. During an exposure, that area integrates incoming light from the scene in front of the camera. Nothing in that process encodes depth, direction, or position in the world.
 
 Even before talking about geography, a pixel already has extent, not location.
 
 A pixel in its simplest form is an area over the camera sensor.
 
 At this stage, nothing in the image tells you:
-	•	where on Earth this pixel comes from
-	•	how far or how large the observed surface is
-	•	or in which direction the scene lies
+* where on Earth this pixel comes from
+* how far or how large the observed surface is
+* or in which direction the scene lies
 
 The pixel exists purely in image space.
 
@@ -49,41 +48,35 @@ The pixel exists purely in image space.
 
 To make pixels feel more concrete, practitioners often introduce Ground Sampling Distance (GSD).
 
-GSD answers a simple question:
-
-*If this image were taken under ideal conditions, how much ground would one pixel roughly cover?*
+GSD answers a simple question: *"If this image were taken under ideal conditions, how much ground would one pixel roughly cover?"*
 
 Under strong assumptions (e.g. perfectly flat terrain, nadir view, known altitude, no lens distortion, ...) the GSD can be approximated from:
-	•	flight altitude
-	•	camera focal length
-	•	physical pixel size on the sensor
+* flight altitude
+* camera focal length
+* physical pixel size on the sensor
 
-Increase altitude, and each pixel covers more ground.
-Change sensor or lens, and the same pixel suddenly represents a different surface area.
+Increase altitude, and each pixel covers more ground. Change sensor or lens, and the same pixel suddenly represents a whole different surface area.
 
 Understanding this is useful. It immediately breaks the illusion that pixels are dimensionless. A pixel can represent centimeters, decimeters, or meters on the ground, depending on context.
 
-But GSD only describes scale — not location.
-
-A pixel with a known ground size can still be misplaced by meters.
+But GSD only describes scale — not location. A pixel with a known ground size can still be misplaced by meters.
 
 ### Why GSD is not enough
 
 So far, we have seen that GSD tells you how much ground a pixel **might roughly** represent. It still says nothing about which part of the ground that pixel is actually seeing.
 
 To answer that question, we would need:
-	•	a viewing direction
-	•	a camera pose
-	•	a reference frame
-	•	and a model of the terrain
+* a viewing direction
+* a camera pose
+* a reference frame
+* and a model of the terrain
 
 Without these, GSD provides a comforting number — but no geometric truth.
 
-| Out of scope (for now)
-| GSD is often treated as constant, but in reality it varies across an image, changes with viewing angle, and breaks down completely on sloped terrain. These effects are real and important — and we will come back to them later — but they are not required to understand the core idea here:
+!!! note "Out of scope (for now)"
+    GSD is often treated as constant, but in reality it varies across an image, changes with viewing angle, and breaks down completely on sloped terrain. These effects are real and important — and we will come back to them later — but they are not required to understand the core idea here:
 
-| **a pixel does not have an intrinsic position**
-| **and its apparent size only exists under strong assumptions**
+    **a pixel does not have an intrinsic position and its apparent size only exists under strong assumptions**
 
 ## The hidden assumptions
 
@@ -105,16 +98,9 @@ For precise geometry, it is the first place where uncertainty enters the system.
 
 Once a pixel is treated as a ray, a second assumption follows naturally: that the ray intersects the ground once, at a well-defined location.
 
-This is only true if:
-	•	the surface is continuous,
-	•	there are no vertical structures,
-	•	there are no occlusions
+This is only true if the surface is continuous and there are no vertical structures or occlusions.
 
-In real scenes, a single ray can intersect:
-	•	a roof edge,
-	•	a façade,
-	•	vegetation,
-	•	or the ground behind an object.
+In real scenes, a single ray can intersect a roof edge, a façade, vegetation, or the ground behind an object.
 
 Choosing which intersection is “the point” is already a modeling decision — even if it is never exposed as such.
 
@@ -135,26 +121,25 @@ The flatter the world is assumed to be, the more confident the result appears �
 Another strong assumption is that the camera’s position and orientation are known with sufficient accuracy.
 
 In practice, pose comes from:
-	•	GPS / GNSS / Baidu / Galileo measurements,
-    •	RTK adjustments,
-	•	inertial sensors,
-	•	time synchronization,
-	•	and calibration.
+* GPS / GNSS / Baidu / Galileo measurements,
+* RTK adjustments,
+* inertial sensors,
+* time synchronization,
+* calibration
 
 Each of these has its own uncertainty, bias, and failure modes. When pose errors exist — and they always do — they directly translate into ground position errors, often amplified by altitude and viewing angle.
 
-The pixel did not move.
-The geometry did.
+The pixel did not move. The geometry did.
 
 ### “Altitude” is known — and meaningful
 
 Finally, many workflows rely on altitude as if it were a single, unambiguous value.
 
 But altitude relative to what?
-	•	mean sea level? Is your current ground at sea level ? 
-	•	takeoff point? Is there always at that exact same distance between the camera sensor and the ground beneath it ? 
-	•	local terrain ?
-    •   an ellipsoid ?
+* mean sea level (AMSL) ? Is your current ground at sea level ? 
+* takeoff point ? Is there always at that exact same distance between the camera sensor and the ground beneath it ? 
+* local terrain ?
+* an ellipsoid ?
 
 Different definitions of altitude can differ by meters. Using the wrong one does not produce an error message — it produces a plausible but wrong result.
 
@@ -184,15 +169,10 @@ It is about geometry.
 
 A pixel in an image corresponds to an area perceived in a viewing direction from the camera.
 
-That direction depends on:
-	•	the camera’s internal geometry (sensor, lens, distortion),
-	•	and the pixel’s position on the sensor.
+That direction depends on the camera’s internal geometry (sensor, lens, distortion) and the pixel’s position on the sensor.
 
 With this information, we still do not have a location — only a direction.
-
-The moment you ask “where is this pixel on the ground?”, you are implicitly asking:
-
-“Along this direction, where does the world exist?”
+The moment you ask “where is this pixel on the ground?”, you are implicitly asking “Along this direction, where does the world exist?”
 
 Answering that question requires more than an image.
 
@@ -200,15 +180,13 @@ Answering that question requires more than an image.
 
 To turn a viewing direction into a location, the direction must intersect something.
 
-That “something” is a model of the world:
-	•	a flat plane,
-	•	a constant altitude,
-	•	a digital elevation model,
-	•	or any other representation of the terrain.
+That “something” is a model of the world such as :
+* a flat plane,
+* a constant altitude,
+* a digital elevation model,
+* or any other representation of the terrain.
 
-Choosing a surface is not optional.
-If no surface is provided, one is assumed.
-
+Choosing a surface is not optional. If no surface is provided, one is assumed.
 This is where many workflows quietly commit to a world model without ever naming it and without the user knowing which one it is.
 
 ### Intersection is a decision, not a fact
@@ -216,15 +194,14 @@ This is where many workflows quietly commit to a world model without ever naming
 Once a surface exists, the viewing direction can be intersected with it.
 
 But that intersection is not a measurement — it is a result of a choice:
-	•	which surface?
-	•	which altitude reference?
-	•	which resolution?
-	•	which smoothing?
+* which surface?
+* which altitude reference?
+* which resolution?
+* which smoothing?
 
 Change the surface, and the intersection moves — sometimes by centimeters, sometimes by meters.
 
-Nothing about the pixel changed.
-Only the assumptions did.
+Nothing about the pixel changed. Only the assumptions did.
 
 ### Reference frames make locations comparable
 
@@ -245,17 +222,17 @@ At this point, the pixel has finally become a geographic hypothesis:
 ### Why this matters
 
 Every pixel-to-ground conversion performs these steps, explicitly or implicitly:
-	1.	derive a viewing direction
-	2.	choose a surface
-	3.	compute an intersection
-	4.	express the result in a reference frame
+1.	derive a viewing direction
+2.	choose a surface
+3.	compute an intersection
+4.	express the result in a reference frame
 
 When these steps are hidden, results look clean, precise, and authoritative.
 
 When they are exposed, it becomes clear that:
-•	different assumptions produce different answers,
-•	confidence depends on the weakest element,
-•	and precision without context is meaningless.
+* different assumptions produce different answers,
+* confidence depends on the weakest element,
+* and precision without context is meaningless.
 
 This is not a flaw of the method.
 It is the nature of geometry.
@@ -277,10 +254,10 @@ It is a necessity.
 ### Defaults are answers to unasked questions
 
 Every time a tool places a point on the ground from imagery, it implicitly answers questions such as:
-	•	which surface should be used?
-	•	which altitude reference applies?
-	•	which projection should express the result?
-	•	which intersection should be considered “the” location?
+* which surface should be used?
+* which altitude reference applies?
+* which projection should express the result?
+* which intersection should be considered “the” location?
 
 Most of the time, these answers are reasonable.
 They are chosen to work well in common situations.
@@ -292,14 +269,14 @@ The issue is that the questions themselves remain invisible.
 ### Precision hides uncertainty
 
 Once a choice is made, tools present the result as a clean, precise coordinate:
-	•	a point snaps to a map
-	•	numbers are displayed with many decimals
-	•	layers align visually
+* a point snaps to a map
+* numbers are displayed with many decimals
+* layers align visually
 
 Nothing in the interface suggests:
-	•	which assumptions were made
-	•	how sensitive the result is to them
-	•	or how much uncertainty remains
+* which assumptions were made
+* how sensitive the result is to them
+* or how much uncertainty remains
 
 The result looks authoritative not because it is exact, but because uncertainty has been flattened away.
 
@@ -310,15 +287,15 @@ It is the cost of abstraction.
 ### Abstractions work — until context changes
 
 Defaults work remarkably well as long as the context matches the assumptions they were designed for:
-	•	relatively flat terrain
-	•	moderate accuracy requirements
-	•	visual or qualitative use cases
+* relatively flat terrain
+* moderate accuracy requirements
+* visual or qualitative use cases
 
 Problems appear when the context shifts:
-	•	terrain relief becomes significant
-	•	vertical accuracy matters more than horizontal alignment
-	•	relative position is more important than absolute location
-	•	errors accumulate across processing steps
+* terrain relief becomes significant
+* vertical accuracy matters more than horizontal alignment
+* relative position is more important than absolute location
+* errors accumulate across processing steps
 
 In those situations, the same defaults do not fail loudly.
 They fail **quietly**.
@@ -329,11 +306,11 @@ They fail **quietly**.
 Up to this point, none of the assumptions we have discussed is outrageous.
 
 Individually, they are all reasonable:
-	•	collapsing a pixel into a single viewing direction,
-	•	assuming a smooth or flat surface,
-	•	trusting a camera pose estimate,
-	•	choosing a default altitude reference,
-	•	expressing the result in a convenient projection.
+* collapsing a pixel into a single viewing direction,
+* assuming a smooth or flat surface,
+* trusting a camera pose estimate,
+* choosing a default altitude reference,
+* expressing the result in a convenient projection.
 
 Most systems rely on these assumptions because they work well most of the time.
 
@@ -345,11 +322,11 @@ Geospatial systems rarely fail because of a single, large mistake.
 They fail because many small approximations quietly stack up.
 
 Each step in a pixel-to-ground conversion contributes a bit of uncertainty:
-	•	the pixel footprint introduces scale ambiguity,
-	•	the camera pose introduces angular uncertainty,
-	•	altitude introduces vertical uncertainty,
-	•	terrain models introduce spatial uncertainty,
-	•	reference frames introduce distortion and convention.
+* the pixel footprint introduces scale ambiguity,
+* the camera pose introduces angular uncertainty,
+* altitude introduces vertical uncertainty,
+* terrain models introduce spatial uncertainty,
+* reference frames introduce distortion and convention.
 
 None of these errors is catastrophic on its own.
 Together, they consume what engineers call an error budget.
@@ -361,18 +338,18 @@ When that budget is exhausted, results can still look precise — but no longer 
 Stacked errors have an uncomfortable property: they do not announce themselves.
 
 They often produce results that are:
-	•	smooth,
-	•	consistent,
-	•	visually aligned,
-	•	numerically precise.
+* smooth,
+* consistent,
+* visually aligned,
+* numerically precise.
 
 Nothing obviously breaks.
 
 Instead, the error shows up:
-	•	when results are compared across datasets,
-	•	when relative positions matter,
-	•	when the same object is observed from different viewpoints,
-	•	or when outputs are reused outside their original context.
+* when results are compared across datasets,
+* when relative positions matter,
+* when the same object is observed from different viewpoints,
+* or when outputs are reused outside their original context.
 
 By then, the assumptions that caused the error are long forgotten.
 
@@ -381,9 +358,9 @@ By then, the assumptions that caused the error are long forgotten.
 Thinking in terms of error budgets does not mean eliminating uncertainty.
 
 It means being explicit about:
-	•	where precision is required,
-	•	where approximation is acceptable,
-	•	and where assumptions are being spent.
+* where precision is required,
+* where approximation is acceptable,
+* and where assumptions are being spent.
 
 A system that acknowledges its error budget can degrade gracefully.
 A system that ignores it can fail silently.
@@ -396,16 +373,16 @@ Not every application needs geometric rigor.
 In many cases, treating a pixel as a point is a reasonable and conscious tradeoff.
 
 This is typically acceptable when:
-	•	the goal is visual exploration or qualitative analysis,
-	•	errors are small relative to the scale of interest,
-	•	exact positioning has no legal or safety consequences,
-	•	results are not reused as ground truth.
+* the goal is visual exploration or qualitative analysis,
+* errors are small relative to the scale of interest,
+* exact positioning has no legal or safety consequences,
+* results are not reused as ground truth.
 
 Examples include:
-	•	city discovery or mapping apps,
-	•	rough tagging or annotation,
-	•	exploratory data analysis,
-	•	early-stage prototyping.
+* city discovery or mapping apps,
+* rough tagging or annotation,
+* exploratory data analysis,
+* early-stage prototyping.
 
 In these contexts, simplicity is not a flaw — it is a feature.
 
@@ -417,16 +394,16 @@ The key condition is that the limitation is understood: *“This is approximate,
 The same simplification becomes problematic when context changes.
 
 Treating pixels as points is no longer acceptable when:
-	•	relative position matters more than visual alignment,
-	•	vertical accuracy is critical,
-	•	results feed into downstream decisions,
-	•	errors have legal, financial, or safety implications.
+* relative position matters more than visual alignment,
+* vertical accuracy is critical,
+* results feed into downstream decisions,
+* errors have legal, financial, or safety implications.
 
 Examples include:
-	•	infrastructure or asset mapping,
-	•	land surveying and boundary definition,
-	•	change detection over time,
-	•	any workflow where outputs are reused as reference data
+* infrastructure or asset mapping,
+* land surveying and boundary definition,
+* change detection over time,
+* any workflow where outputs are reused as reference data
 
 In these situations, the cost of a silent assumption can be much higher than the cost of additional complexity : A 1% error on the location of your mailbox relative to your front yard will maybe lead the mailman 10cm away from your mailbox, the same 1% error on a 1 km wide airfield could lead an aircraft with an automated landing system 10 meters outside the runway. Not the same implications and consequences.
 
